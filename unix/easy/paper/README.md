@@ -21,3 +21,23 @@ Following the link we see a registration page for rocketchat.
 
 Creating an account & loggin in, we see a group chat that has a bot in it called recyclops. It see we have limited access to run commands through the bot.
 ![](./screenshots/fileRead.png)
+
+Reading files we can infer the the bot runs cat INPUT and ls -al INPUT with the list command. Lets try injecting os commands.
+![](./screenshots/noEasyRce.png)
+
+Unfortunately its not that easy. Digging around we find the files for the rocket chat bot. We find an interesting directory called scripts. Like list.js. One interesting one is run.js. Reading the file it seems like the bot has an undocumented (at least in the rocketchat gc) command to  run arbitrary commands. Lets try it.
+![](./screenshots/ohShitt.png)
+
+Lets pop a shell with the classic one line bash tcp rev shell.
+![](./screenshots/classicBashShell.png)
+
+Nice now lets get user flag.
+![](./screenshots/user.png)
+
+Checking our enviornment we see an interesting variable, ROCKETCHAT_PASSWORD 
+![](./screenshots/recyclopsPasswd.png)
+
+Lets see if dwight reuesed his password on the ssh server so we don't need to bother with setting up socat.
+![](./screenshots/passwdReuse.png)
+
+Copying linpeas.sh onto the machine & running shows nothing very promising. I go through the rest of my checklist. One of the cve recomenders recomends CVE-2021-3560. Looking into it we find its a race condition vulnerability in polkit.  
