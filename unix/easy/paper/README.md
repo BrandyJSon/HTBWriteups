@@ -44,7 +44,7 @@ Nice now lets get user flag.
 
 ![](./screenshots/user.png)
 
-Checking our enviornment we see an interesting variable, ROCKETCHAT_PASSWORD 
+Checking our enviornment we see an interesting variable, ROCKETCHAT_PASSWORD.
 
 ![](./screenshots/recyclopsPasswd.png)
 
@@ -52,4 +52,16 @@ Lets see if dwight reuesed his password on the ssh server so we don't need to bo
 
 ![](./screenshots/passwdReuse.png)
 
-Copying linpeas.sh onto the machine & running shows nothing very promising. I go through the rest of my checklist. One of the cve recomenders recomends CVE-2021-3560. Looking into it we find its a race condition vulnerability in polkit.  
+Copying linpeas.sh onto the machine & running shows nothing very promising. I go through the rest of my checklist. One of the cve recomenders recomends CVE-2021-3560. Looking into it we find its a race condition vulnerability in polkit. This vulnerability works by using dbus to send a request to create a new user through the dbus service org.freedesktop.Accounts.service, which in turn sends a request to pkexec as this service requires root. The exploit works by having the request cancel before the dbus communicates the uid to the service. Which makes polkit think it's uid is 0 thus skipping the need for authentication. We can see at what point to delay by using the command time then running the exploit. Looking on line however reveals the creator of the box has a cve-2021-3560 poc script so lets just use that script.
+
+![](./screenshots/githubPage.png)
+
+After running the script a bunch of times it eventually works out and we have created a user with sudo permissions. 
+
+![](./screenshots/wowWorkedTry10.png)
+
+Now we read flag and win.
+
+![](./screenshots/wowVICTORY.png)
+
+After I solve a box I always check other people's writeups to see how they solved the box. Turns out I was running a very old version of linpeas that didn't search for this vulnerability. I didn't waste a lot of time on this box, but this is definitely a lesson learned.
