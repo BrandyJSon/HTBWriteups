@@ -86,3 +86,25 @@ Checking the credentials on the users reveals that gbyolo has the same password 
 
 ![](./imgs/foothold/10.png)
 
+## User
+
+As we cannot read the user flag as gbyolo so we need to look for priv esc. We have a password so lets see if we have an sudo permissons. 
+
+![](./imgs/user/0.png)
+
+We are able to sudo as the developer user and run meta-git, which is a node library that allows for anagement of meta repositories using git commands. Luckily looking for cve's on the library reveals a command injection vulnerability reported on hackerone by ![mik317](https://hackerone.com/mik317).
+
+![](./imgs/user/1.png)
+
+Looking at his report the file that the vulnerability exists in is metaGitUpdate.js. Lets read the metaGitUpdate.js file on the box and see if it has the same vulnerble code.
+
+![](./imgs/user/1.1.png)
+
+This snippet is clearly vulnerbale to command inject there being no sanitization of user inputs. Lets see if we can get the developer user's ssh private key using this technique.
+
+![](./imgs/user/2.png)
+
+Success!
+With this we can reconnect through ssh as the developer user and get the first flag!
+
+![](./imgs/user/3.png)
