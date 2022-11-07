@@ -142,3 +142,6 @@ Checking /etc/passwd reveals the new user toor with a hash in /etc/passwd.
 Switching users to toor we can finally root the box.
 
 ![](./imgs/root/8.png)
+
+## Wrap up
+This box was pretty fun though maybe a little easy for a medium box. The most interesting part was definetly root. There also was a couple rabbit holes. Most notiably was a further sqli on the get schedule endpoint on the admin page which didn't yield anyhting. The main thing the box lacked was enumeration. It felt very linear but besides that I would recomend at least going developer to root as playing around with gdb and injecting shellcode is quite fun.
