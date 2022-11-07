@@ -96,7 +96,7 @@ We are able to sudo as the developer user and run meta-git, which is a node libr
 
 ![](./imgs/user/1.png)
 
-Looking at his report the file that the vulnerability exists in is metaGitUpdate.js. Lets read the metaGitUpdate.js file on the box and see if it has the same vulnerble code.
+Looking at his report the file that the vulnerability exists in is metaGitUpdate.js. Lets read the metaGitUpdate.js file on the box and see if it has the same vulnerable code.
 
 ![](./imgs/user/1.1.png)
 
@@ -108,3 +108,37 @@ Success!
 With this we can reconnect through ssh as the developer user and get the first flag!
 
 ![](./imgs/user/3.png)
+
+## Root
+
+We unfortunately don't have as easy a time ahead for us getting root. There is no sudo permissons but we are a part of a group called debug. Using the find command reveals the only file with debug group permissons is GDB. (Always remeber to check for ACLs if find doesn't reveal any files when you are in a non standard group). Running a getCap reveals that GDB has the ![SYS_PTRACE](https://man7.org/linux/man-pages/man7/capabilities.7.html) capability set. 
+
+![](./imgs/root/1.png)
+
+Hacktricks has a very good page on exploiting linux capabilities. Looking under SYS_PTRACE gives us a python2.7 privilege escalation script that injects shellcode into the live execution of a process. I experimented for a while with trying to inject shellcode using GDB directly but I couldn't get the process to keep permissons. Perhaps this is becasue I don't have a lot of experience with GDB (go radare2!!) but whatever method I would try the process would always execute the shellcode as developer. Luckily for us the GDB on the box was compiled with python. Unfortuanetly it's python3 so we will need to update the script.
+
+![](./imgs/root/2.png)
+
+Just to clarify to anyone who like me who doesn't know the ins and outs of GDB. When GDB is compiled with python it allows for access to python terminal in the tool. However this does not spawn a new process, running inside GDB we will be able to run python command and our python script with the SYS_PTRACE capability. 
+
+![](./imgs/root/3.png)
+
+Now we have the the idea together. We need to fix the script so the python3 interpreter can run the code. Using a pip pacakage I found called ![2to3](https://docs.python.org/3/library/2to3.html) and making some slight manual work it wasn't too hard to fix the code. Additionally I changed the payload to ![this shellcode](https://www.exploit-db.com/shellcodes/45185) to avoid the repeated disappoint of popping a shell to only realize you are still the developer user from my GDB atempts.
+
+![python3 verison of the script](./imgs/root/pyRoot2)
+
+Following a blog post's recomendation on exploiting this capabilty our target process is going to be the nginx master process. We will hardcode the pid into the file because we are running the file in the python shell.
+
+![](./imgs/root/4.png)
+
+Now we need to open GDB and the priveleged python shell. We can run the file using the following syntax.
+
+![](./imgs/root/injectWorks.png)
+
+Checking /etc/passwd reveals the new user toor with a hash in /etc/passwd.
+
+![](./imgs/root/6.png)
+
+Switching users to toor we can finally root the box.
+
+![](./imgs/root/8.png)
