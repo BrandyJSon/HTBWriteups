@@ -12,5 +12,8 @@ Alexander Kilroy submission for CPTC 2023-2024
   * #### 2a. CronJob leaks credentials of employee account
   ### 3. Low Severity Findings
   * #### 3a. Anonymous Access to SMB shares allows for user enumeration
-  * #### 4a. Weak password policy
+  * #### 3b. Weak password policy
+  ### 4. Remedations
+  ### 5. Executive Summary
+
   
