@@ -16,4 +16,8 @@ Alexander Kilroy submission for CPTC 2023-2024
   ### 4. Remedations
   ### 5. Executive Summary
 
+  ## High Severity Findings
+
+  ### Use After Free Vulnerability leads to local privilege escalation
+
   
