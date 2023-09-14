@@ -105,7 +105,17 @@ Access to smb through null account (empty username and password) allows for brut
 <div align="left">
 <img src="./images/SMBUserEnum.png" align="left"</img>
 </div>
-
+ \
+  &nbsp;
+  \
+  &nbsp;
+  \
+  &nbsp;
+  \
+  &nbsp;
+  \
+  &nbsp;
+  
 #### Weak password policy
 
 The password policy on GOFER only requires a minimum password lenght of 5 characters and has no complexity requirements.
