@@ -63,11 +63,35 @@ Alexander Kilroy submission for CPTC 2023-2024
 
   The apache config setting of <Limit> is a blacklist of allowed http methods. <Limit GET> will only require http authentication when sending GET requests. [Apache Limit Documentation](https://httpd.apache.org/docs/2.4/mod/core.html#limit). This allows for bypassing of http authentication to directly access web proxy unauthenticated by using any other method. The web proxy allows for access to the localhost only smtp service running on GOFER allowing for smtp commands to be ran though the php gopher wrapper instead of the normal smtp wrapper which is blacklsited. The blacklist entries of localhost and /127 can be bypassed by using 0 as the ip address, which is an alaternate way to write localhost. By sending an email with a malicous odt document linked in it a succesful phish is easy to accomplish. The most likely avenue for phishing is by sending the email from the CEO's email and using the social engineering principle of authrority.
 
+  <div align="left">
+    <img src="./images/insecureAccessWebProxy.png" width="400px" </img>
+    <img src="./images/user.png" width="400px" </img
+  </div>
+
+  
+
 ## Medium Severity Findings
 
 ### CronJob leaks credentials of employee account
 
 A cronjob running the script at path /root/scripts/curl.sh allows leaks the credentials of tbuckley acount which can be viewed by any user through monitoring processes.
+
+```
+2023/09/13 16:14:35 CMD: UID=0     PID=45547  | /usr/sbin/smbd --foreground --no-process-group 
+2023/09/13 16:15:01 CMD: UID=0     PID=45549  | /usr/sbin/CRON -f 
+2023/09/13 16:15:01 CMD: UID=0     PID=45548  | /usr/sbin/CRON -f 
+2023/09/13 16:15:01 CMD: UID=0     PID=45551  | /bin/bash /root/scripts/curl.sh 
+2023/09/13 16:15:01 CMD: UID=0     PID=45550  | /bin/sh -c /root/scripts/curl.sh 
+2023/09/13 16:15:01 CMD: UID=0     PID=45552  | /usr/bin/curl http://proxy.gofer.htb/?url=http://gofer.htb --user tbuckley:ooP4dietie3o_hquaeti 
+2023/09/13 16:15:01 CMD: UID=0     PID=45555  | /usr/sbin/CRON -f 
+2023/09/13 16:15:01 CMD: UID=0     PID=45556  | /usr/sbin/CRON -f 
+2023/09/13 16:15:01 CMD: UID=0     PID=45557  | /bin/bash /root/scripts/mail.sh 
+2023/09/13 16:15:01 CMD: UID=0     PID=45558  | /bin/bash /root/scripts/mail.sh 
+2023/09/13 16:15:01 CMD: UID=0     PID=45559  | /bin/bash /root/scripts/mail.sh 
+2023/09/13 16:15:01 CMD: UID=0     PID=45560  | 
+2023/09/13 16:15:01 CMD: UID=0     PID=45561  | /usr/sbin/CRON -f 
+2023/09/13 16:15:01 CMD: UID=0     PID=45562  | 
+```
 
 ### HTTP allows for web proxy crednitals to be intercepted
 
@@ -78,10 +102,54 @@ Lack of implementation of HTTPS on web proxy causes credentials to be sent in pl
 #### Anonymous Access to SMB shares allows for user enumeration
 
 Access to smb through null account (empty username and password) allows for bruteforcing of SIDs and user enumeration.
+<div align="left">
+<img src="./images/SMBUserEnum.png" align="left"</img>
+</div>
 
 #### Weak password policy
 
 The password policy on GOFER only requires a minimum password lenght of 5 characters and has no complexity requirements.
+```
+ ============================( Password Policy Information for 10.10.11.225 )============================
+
+                                                          
+
+[+] Attaching to 10.10.11.225 using a NULL share
+                                                                                                                     
+[+] Trying protocol 139/SMB...
+
+[+] Found domain(s):
+                                                          
+        [+] GOFER
+        [+] Builtin
+                                                          
+[+] Password Info for Domain: GOFER
+                                                          
+        [+] Minimum password length: 5
+        [+] Password history length: None
+        [+] Maximum password age: 37 days 6 hours 21 minutes 
+        [+] Password Complexity Flags: 000000
+
+                [+] Domain Refuse Password Change: 0
+                [+] Domain Password Store Cleartext: 0
+                [+] Domain Password Lockout Admins: 0
+                [+] Domain Password No Clear Change: 0                                                               
+                [+] Domain Password No Anon Change: 0
+                [+] Domain Password Complex: 0
+                                                          
+        [+] Minimum password age: None       
+        [+] Reset Account Lockout Counter: 30 minutes 
+        [+] Locked Account Duration: 30 minutes 
+        [+] Account Lockout Threshold: None                                                                          
+        [+] Forced Log off Time: 37 days 6 hours 21 minutes 
+                                                                                                                     
+                                                                                                                     
+
+[+] Retieved partial password policy with rpcclient:                                                                 
+
+                                                          
+Password Complexity: Disabled         
+```
 
 ## Remedations
 
