@@ -2,6 +2,7 @@
 Alexander Kilroy submission for CPTC 2023-2024
 
 [Machine Hacked](https://app.hackthebox.com/machines/Gofer)
+
 [Proof of Completion](https://www.hackthebox.com/achievement/machine/842922/554)
 ## Table of contents
 
@@ -14,6 +15,11 @@ Alexander Kilroy submission for CPTC 2023-2024
   * #### 3a. Anonymous Access to SMB shares allows for user enumeration
   * #### 3b. Weak password policy
   ### 4. Remedations
+  * #### 4a. Use After Free Vulnerability leads to local privilege escalation
+  * #### 4b. Improper access control on web proxy leads to SSRF and aribtrary sending of emails
+  * #### 4c. CronJob leaks credentials of employee account
+  * #### 4d. Anonymous Access to SMB shares allows for user enumeration
+  * #### 4e. Weak password policy
   ### 5. Executive Summary
 
   ## High Severity Findings
@@ -65,4 +71,36 @@ A cronjob running the script at path /root/scripts/curl.sh allows leaks the cred
 ## Low Severity Findings
 
 #### Anonymous Access to SMB shares allows for user enumeration
+
+Access to smb through null account (empty username and password) allows for bruteforcing of SIDs and user enumeration.
+
+#### Weak password policy
+
+The password policy on GOFER only requires a minimum password lenght of 5 characters and has no complexity requirements.
+
+## Remedations
+
+### Use After Free Vulnerability leads to local privilege escalation
+
+* #### 1. The use after free vulnerability will be fixed by setting the pointer to the user detials to 0x0 and mallocing a new block if the pointer is pointing to 0x0 like when deleting and creating a note.
+* #### 2. Using an absolute path instead of an indirect path will make it much harder to gain command execution.
+
   
+### Improper access control on web proxy leads to SSRF and aribtrary sending of emails
+
+* #### 1. Using <Require> instead of limit will require all users of the web proxy to authenticate
+* #### 2. Disable gopher:// wrapper if not used in business operations
+* #### 3. Improve blacklist to include /0 or implement a whitelist if possible
+
+### CronJob leaks credentials of employee account
+
+* #### 1. Use -n flag and a netrc file in the root directory
+
+### Anonymous Access to SMB shares allows for user enumeration
+
+* #### 1. Disable null acount access
+
+### Weak password policy
+
+* #### 1. Change password policy on GOFER to at a bare minimum require 8 characters and a special character by editing this file /etc/pam.d/common-password
+
