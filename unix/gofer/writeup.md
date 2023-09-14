@@ -104,3 +104,6 @@ The password policy on GOFER only requires a minimum password lenght of 5 charac
 
 * #### 1. Change password policy on GOFER to at a bare minimum require 8 characters and a special character by editing this file /etc/pam.d/common-password
 
+## Executive Summary
+
+A malicous actor would be able to completely compromise GOFER. A large breach kills a start up, there aren't enough employees or customers to be able to survive after the reputation damage and legal fines.
