@@ -115,4 +115,4 @@ The password policy on GOFER only requires a minimum password lenght of 5 charac
 
 ## Executive Summary
 
-A malicous actor would be able to completely compromise GOFER. A large breach kills a start up, there aren't enough employees or customers to be able to survive after the reputation damage and legal fines. Specifically as a NYC based company there is an expectation of security by the state set by the SHIELD act and other similar laws. 
+A malicous actor would be able to completely compromise GOFER. A large breach kills a start up, there aren't enough employees or customers to be able to survive after the reputation damage and legal fines. Specifically as a NYC based company there is an expectation of security by the state set by the SHIELD act and other similar laws. The fines that come from violations of these laws from a data breach could well exceed any emergency fund captial GOFER has in reserve being a company with only 4 employees. It is emperative that these security issues are resolved for the companies longevity and growth.
