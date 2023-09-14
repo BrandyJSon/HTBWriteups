@@ -11,6 +11,7 @@ Alexander Kilroy submission for CPTC 2023-2024
   * ####  1b. Improper access control on web proxy leads to SSRF and aribtrary sending of emails
   ### 2. Medium Severity Findings
   * #### 2a. CronJob leaks credentials of employee account
+  * #### 2b. HTTP allows for web proxy crednitals to be intercepted
   ### 3. Low Severity Findings
   * #### 3a. Anonymous Access to SMB shares allows for user enumeration
   * #### 3b. Weak password policy
@@ -68,6 +69,10 @@ Alexander Kilroy submission for CPTC 2023-2024
 
 A cronjob running the script at path /root/scripts/curl.sh allows leaks the credentials of tbuckley acount which can be viewed by any user through monitoring processes.
 
+### HTTP allows for web proxy crednitals to be intercepted
+
+Lack of implementation of HTTPS on web proxy causes credentials to be sent in plaintext. In addtion capabilities set on tcpdump binary allow for reading of all traffic including any web proxy credentials.
+
 ## Low Severity Findings
 
 #### Anonymous Access to SMB shares allows for user enumeration
@@ -92,6 +97,10 @@ The password policy on GOFER only requires a minimum password lenght of 5 charac
 * #### 2. Disable gopher:// wrapper if not used in business operations
 * #### 3. Improve blacklist to include /0 or implement a whitelist if possible
 
+###  HTTP allows for web proxy crednitals to be intercepted
+
+* #### 1. Implemented HTTPS and updating all employees and scripts that connect to the web proxy will prevent credentials from being sent over the network in plaintext.
+  
 ### CronJob leaks credentials of employee account
 
 * #### 1. Use -n flag and a netrc file in the root directory
@@ -106,4 +115,4 @@ The password policy on GOFER only requires a minimum password lenght of 5 charac
 
 ## Executive Summary
 
-A malicous actor would be able to completely compromise GOFER. A large breach kills a start up, there aren't enough employees or customers to be able to survive after the reputation damage and legal fines.
+A malicous actor would be able to completely compromise GOFER. A large breach kills a start up, there aren't enough employees or customers to be able to survive after the reputation damage and legal fines. Specifically as a NYC based company there is an expectation of security by the state set by the SHIELD act and other similar laws. 
